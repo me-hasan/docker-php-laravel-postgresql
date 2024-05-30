@@ -1,0 +1,59 @@
+version: '3.8'
+
+services:
+  web:
+    container_name: admin-panel-nginx
+    hostname: adminpanelwebsrv
+    image: nginx:latest
+    restart: always
+    ports:
+      - "8081:80"
+    volumes:
+      - ./src:/public_html
+      - ./conf.d:/etc/nginx/conf.d
+      - ./logs/nginx:/var/log/nginx
+    depends_on:
+      - php
+    networks:
+      - wingsfinnet
+
+  php:
+    container_name: admin-panel-php
+    hostname: adminpanelphpsrv
+    build:
+      context: .
+      dockerfile: Dockerfile 
+    volumes:
+      - ./src:/public_html
+      - ./logs:/var/log/php-fpm
+    working_dir: /public_html
+    expose:
+      - "9000"
+    networks:
+      - wingsfinnet
+
+  composer:
+    image: composer
+    volumes:
+      - ./src:/app
+    command: install
+    networks:
+      - wingsfinnet
+
+  db:
+    container_name: admin-panel-db
+    image: postgres:15
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+    volumes:
+      - ./db_data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    networks:
+      - wingsfinnet
+
+networks:
+  wingsfinnet:
+    external: true

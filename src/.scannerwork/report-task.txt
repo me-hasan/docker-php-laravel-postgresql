@@ -1,0 +1,6 @@
+projectKey=dhoni-admin-panel
+serverUrl=http://localhost:9005
+serverVersion=10.2.1.78527
+dashboardUrl=http://localhost:9005/dashboard?id=dhoni-admin-panel
+ceTaskId=AYuFnVKNDzW8uh5twfDa
+ceTaskUrl=http://localhost:9005/api/ce/task?id=AYuFnVKNDzW8uh5twfDa
